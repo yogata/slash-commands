@@ -45,10 +45,10 @@ description: 計画立案からコミットまでを一気通貫で実行する�
 
 Issueのラベルから規模パターンを判定します：
 
-| ラベル | パターン | specs/更新 |
-|-------|---------|----------|
-| `bug`, `critical` | A（小） | なし |
-| `feature`, `enhancement` | B（中） | あり |
+| ラベル                   | パターン | specs/更新 |
+| ------------------------ | -------- | ---------- |
+| `bug`, `critical`        | A（小）  | なし       |
+| `feature`, `enhancement` | B（中）  | あり       |
 
 ## 手順
 
@@ -62,8 +62,8 @@ Issueのラベルから規模パターンを判定します：
    ```
 
    - ラベルから文脈（機能追加 or バグ修正）と規模（パターンA/B）を判定する:
-      - `enhancement`, `feature` → 機能追加（パターンB）
-      - `bug`, `critical` → バグ修正（パターンA）
+     - `enhancement`, `feature` → 機能追加（パターンB）
+     - `bug`, `critical` → バグ修正（パターンA）
 
 2. **Worktree作成**
    - worktree用ディレクトリを作成:
@@ -82,6 +82,7 @@ Issueのラベルから規模パターンを判定します：
    ```
 
 3. **@planによる計画立案**
+   - 実装計画は `specs/` とは分離し、 Plan agent の既定場所に保存する
    - Plan agentを使用して、Issueごとに実装計画を立案する:
 
    ```
@@ -97,71 +98,76 @@ Issueのラベルから規模パターンを判定します：
 
    ```
    /start-work
-    ```
+   ```
 
-    - 計画に従い、コード作成・修正およびテストを実施する
+   - 計画に従い、コード作成・修正およびテストを実施する
 
 5. **specifications.md（HLD）更新（パターンBのみ）**
-    - **パターンBの場合のみ**、`specs/specifications.md`（HLD）を更新する:
-      - 実装で確定した仕様を追加・更新
-      - アーキテクチャ、コンポーネント間の関係、データフローを記述
-    
-    ```markdown
-    ## {機能名}
-    
-    ### アーキテクチャ
-    - [システム全体の構造]
-    - [コンポーネント間の関係]
-    
-    ### データフロー
-    - [データの流れ]
-    ```
+   - **パターンBの場合のみ**、`specs/specifications.md`（HLD）を更新する:
+     - 実装で確定した仕様を追加・更新
+     - アーキテクチャ、コンポーネント間の関係、データフローを記述
+
+   ```markdown
+   ## {機能名}
+
+   ### アーキテクチャ
+
+   - [システム全体の構造]
+   - [コンポーネント間の関係]
+
+   ### データフロー
+
+   - [データの流れ]
+   ```
 
 6. **implementation-guide.md（LLD）作成（パターンBのみ）**
-    - **パターンBの場合のみ**、`specs/implementation-guide.md`（LLD）を作成・更新する:
-      - クラス設計、関数シグネチャ、アルゴリズムを記述
-    
-    ```markdown
-    ## {機能名}
-    
-    ### クラス設計
-    - [クラス名と責務]
-    - [メソッド一覧]
-    
-    ### 関数シグネチャ
-    - [関数名、引数、戻り値]
-    
-    ### アルゴリズム
-    - [主要な処理ロジック]
-    ```
+   - **パターンBの場合のみ**、`specs/implementation-guide.md`（LLD）を作成・更新する:
+     - クラス設計、関数シグネチャ、アルゴリズムを記述
+
+   ```markdown
+   ## {機能名}
+
+   ### クラス設計
+
+   - [クラス名と責務]
+   - [メソッド一覧]
+
+   ### 関数シグネチャ
+
+   - [関数名、引数、戻り値]
+
+   ### アルゴリズム
+
+   - [主要な処理ロジック]
+   ```
 
 7. **ADR status更新（パターンBのみ）**
-    - **パターンBの場合のみ**、関連するADRのstatusを更新:
-      - `proposed` → `accepted`
-    
-    ```markdown
-    ## Status
-    accepted
-    ```
+   - **パターンBの場合のみ**、関連するADRのstatusを更新:
+     - `proposed` → `accepted`
+
+   ```markdown
+   ## Status
+
+   accepted
+   ```
 
 8. **動作確認・テスト**
-    - ユニットテストとE2Eテストを行うこと
-    - 既存のテストが通ることを確認する
-    - 新規機能の場合はテストを追加し、パスすることを確認する
-    - バグ修正の場合は再現手順で問題が解消されたことを確認する
+   - ユニットテストとE2Eテストを行うこと
+   - 既存のテストが通ることを確認する
+   - 新規機能の場合はテストを追加し、パスすることを確認する
+   - バグ修正の場合は再現手順で問題が解消されたことを確認する
 
 9. **コミット**
-    - 変更内容をステージングする:
+   - 変更内容をステージングする:
 
-    ```bash
-    git add -A
-    ```
+   ```bash
+   git add -A
+   ```
 
-    - 文脈に応じたコミットメッセージでコミットする:
-      - **機能追加**: `git commit -m "feat: <実装内容の要約> (#$ISSUE_NUMBER)"`
-      - **バグ修正**: `git commit -m "fix: <修正内容の要約> (#$ISSUE_NUMBER)"`
-    
-    - **注意**: specs/のコミットは `/issue-close` で行う（コードと同時）
+   - 文脈に応じたコミットメッセージでコミットする:
+     - **機能追加**: `git commit -m "feat: <実装内容の要約> (#$ISSUE_NUMBER)"`
+     - **バグ修正**: `git commit -m "fix: <修正内容の要約> (#$ISSUE_NUMBER)"`
+   - **注意**: specs/のコミットは `/issue-close` で行う（コードと同時）
 
 10. **プッシュ**
     - ブランチをリモートリポジトリにプッシュする:
@@ -171,11 +177,11 @@ Issueのラベルから規模パターンを判定します：
     ```
 
 11. **PR作成**
-     - 既存のPRを確認する:
+    - 既存のPRを確認する:
 
-     ```bash
-     gh pr list --head $(git branch --show-current) --state open
-     ```
+    ```bash
+    gh pr list --head $(git branch --show-current) --state open
+    ```
 
     - PRが存在する場合は更新する:
 
@@ -189,23 +195,25 @@ Issueのラベルから規模パターンを判定します：
     gh pr create --base main --title "feat/fix: {要約} (#$ISSUE_NUMBER)" --body "Issueの要約 + 実装内容の概要 + テスト結果"
     ```
 
- 12. **レビュー依頼**
-     - ユーザーにレビューを促す:
-       > PRを作成/更新しました: {PR_URL}
-       > ユーザーレビューをお願いします.
-       >
-       > - OK → `/issue-close`
-       > - NG（仕様バグ）→ `/issue-update` → `/issue-work`
-       > - NG（実装バグ）→ `/issue-update --comment` → `/issue-work`
+12. **レビュー依頼**
+    - ユーザーにレビューを促す:
+      > PRを作成/更新しました: {PR_URL}
+      > ユーザーレビューをお願いします.
+      >
+      > - OK → `/issue-close`
+      > - NG（仕様バグ）→ `/issue-update` → `/issue-work`
+      > - NG（実装バグ）→ `/issue-update --comment` → `/issue-work`
 
 13. **Worktreeの状態確認**
     - レビュー待ちの間、worktreeは保持される
     - メインディレクトリに戻る場合:
+
     ```bash
     cd ../..
     ```
 
     - 再度worktreeで作業する場合:
+
     ```bash
     cd .worktrees/$ISSUE_NUMBER-<type>
     ```
@@ -306,20 +314,21 @@ Issueのラベルから規模パターンを判定します：
    - 他のPRがマージされた後、自分のPRで競合が発生
 
 2. **競合解決**
+
    ```bash
    # 最新のmainを取り込む
    git fetch origin
    git rebase origin/main
    # または
    git merge origin/main
-   
+
    # 競合箇所を解決
    # ... エディタで編集 ...
-   
+
    # 解決完了
    git add specs/requirements.md
    git rebase --continue  # または git commit
-   
+
    # 再プッシュ
    git push --force-with-lease
    ```
