@@ -19,7 +19,7 @@ description: 要件を整理・定義する（機能追加・バグ修正共通�
 | パターン | 規模 | specs/更新 | ADR | 判定方法 |
 |---------|------|----------|-----|---------|
 | **A（小）** | バグ修正・軽微変更 | なし | なし | 自動判定 |
-| **B（中）** | 新機能追加 | あり | 1個 | 自動判定 |
+| **B（中）** | 新機能追加 | あり | スキル判定 | 自動判定 |
 
 ### 自動判定ロジック
 
@@ -92,11 +92,28 @@ specs/の更新（requirements.md、specifications.md（HLD）、ADR）を行い
     - 今回の実装対象範囲（Must Have）
     - 今回は対象外とする範囲（Out of Scope / Nice to Have）
 
-4. **Draft更新**
+4. **ADR作成要否の判定**
+    - `adr-guidelines` スキルを使用してADR作成の必要性を判定する
+    - スキルへの入力: 機能概要、要件、スコープ
+    - スキルの出力に従う:
+      - 「ADR作成推奨: [理由]」→ ADRを作成する（ステップ6で実施）
+      - 「ADR不要: [理由]」→ ADR作成をスキップし、理由を出力に含める
+
+5. **定義内容の報告と更新確認**
+    - 以下の構造でユーザーに報告し、仕様書・ADRの更新を行ってよいか確認する:
+      - **概要**: 機能の一言説明
+      - **目的**: 解決する課題や価値
+      - **要件リスト**: 箇条書きで列挙
+      - **スコープ**: 対象/対象外の境界線
+      - **更新予定のドキュメント**: requirements.md、specifications.md（HLD）、ADR（スキル判定で「推奨」の場合のみ）
+      - **ADR判定結果**: スキル判定の結果と理由を含める
+      - **確認**: 「以上の内容で仕様書を更新してよろしいでしょうか？（仕様書の更新までが issue-req の実施範囲です）」と尋ねる。
+6. **仕様書・ADRの更新（ユーザー承認後）**
+    - ユーザーから承認を得た後、以下のドキュメントを更新する:
     - `specs/requirements.md` に要件を追加する
     - `specs/specifications.md`（HLD）に概要レベルの仕様を追加する
       - アーキテクチャ、コンポーネント間の関係、データフロー
-    - `specs/adr/NNN-xxx.md` を新規作成する（status: proposed）
+    - `specs/adr/NNN-xxx.md` を新規作成する（status: proposed）— **スキル判定で「ADR作成推奨」の場合のみ**
     
     **Specifications.md（HLD）テンプレート**:
     ```markdown
@@ -134,14 +151,6 @@ specs/の更新（requirements.md、specifications.md（HLD）、ADR）を行い
     ## Status
     proposed
     ```
-
-5. **定義内容の報告**
-    - 以下の構造でユーザーに報告する:
-      - **概要**: 機能の一言説明
-      - **目的**: 解決する課題や価値
-      - **要件リスト**: 箇条書きで列挙
-      - **スコープ**: 対象/対象外の境界線
-      - **Draft更新**: requirements.md、specifications.md（HLD）、ADRの更新内容
 
 ---
 
@@ -183,16 +192,21 @@ specs/の更新（requirements.md、specifications.md（HLD）、ADR）を行い
 - 対象: [実装範囲]
 - 対象外: [今回の実装対象外]
 
-## Draft更新
-- `specs/requirements.md`: [追加内容]
-- `specs/adr/NNN-xxx.md`: [ADR内容]
+## 更新予定のドキュメント
+ `specs/requirements.md`: [追加予定内容]
+ `specs/specifications.md` (HLD): [追加予定内容]
+ `specs/adr/NNN-xxx.md`: [ADR作成予定内容]（ADR作成推奨の場合のみ）
 
-> ✅ パターンB（中規模）と判定しました。Draftを更新しました。
+## ADR判定結果
+ [ADR作成推奨/ADR不要]: [理由]
+
+> ✅ パターンB（中規模）と判定しました。
+> 以上の内容で仕様書を更新してよろしいでしょうか？（仕様書の更新までが issue-req の実施範囲です）
+
+*(ユーザー承認後)*
+> 仕様書を更新しました。[ADRを更新しました / ADRは不要と判定されたためスキップしました]
 > 次のステップ: `/issue-create` を使用してIssueに登録しますか？
 ```
-
----
-
 ## 使用例
 
 ### パターンA（自動判定）
@@ -207,5 +221,6 @@ specs/の更新（requirements.md、specifications.md（HLD）、ADR）を行い
 /issue-req
 > ユーザー管理機能を作りたい
 # → パターンBと自動判定
-# → Draft更新（requirements.md、ADR）
+# → 要件定義と仕様書更新案の提示
+# → (ユーザー承認後) Draft更新（requirements.md、ADR）
 ```

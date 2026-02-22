@@ -146,9 +146,9 @@ specs/
     │
     ├─ パターンA: Issue本文のみ → /issue-create
     │
-    └─ パターンB: Draft更新
-         - requirements.md 追加
-         - ADR追加（status: proposed）
+    └─ パターンB: 仕様確認とDraft更新
+         - ユーザーに仕様書・ADRの更新可否を確認
+         - 承認後、要件(requirements.md)の追加、ADR(status: proposed)の追加を実施
          │
          ▼
     /issue-create → Issue作成
@@ -232,7 +232,7 @@ git push --force-with-lease
 
 - 機能追加: 構造化された要件定義（概要・目的・要件リスト・スコープ）
 - バグ修正: 事象分析（概要・根本原因・影響範囲・対応方針）
-- **パターンB: Draft更新（requirements.md、ADR）**
+- **パターンB: 要件の提案と仕様書・ADR更新の確認 → 承認後にDraft更新（requirements.md、ADR）**
 
 **次のステップ:**
 
@@ -423,7 +423,8 @@ git push --force-with-lease
 # 1. 要件定義（自動的にパターンBと判定）
 /issue-req
 > ユーザー管理機能を作りたい
-# → Draft更新（requirements.md、ADR）
+# → 要件定義と仕様書更新案の提示
+# → (ユーザー承認後) Draft更新（requirements.md、ADR）
 
 # 2. Issue作成
 /issue-create

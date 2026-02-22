@@ -141,9 +141,13 @@ Issueのラベルから規模パターンを判定します：
    - [主要な処理ロジック]
    ```
 
-7. **ADR status更新（パターンBのみ）**
-   - **パターンBの場合のみ**、関連するADRのstatusを更新:
-     - `proposed` → `accepted`
+7. **ADR status更新（パターンBのみ、ADR作成時）**
+   - **パターンBの場合のみ**、ADRが作成されている場合にstatusを更新:
+     - まず `specs/adr/` ディレクトリ内に該当機能のADR（status: proposed）が存在するか確認
+     - ADRが存在する場合: `proposed` → `accepted` に更新
+     - ADRが存在しない場合: 更新をスキップ（アーキテクチャ的に重要でない機能のため）
+
+   > ADRなし: アーキテクチャ的に重要でない変更のため、ADR更新をスキップします
 
    ```markdown
    ## Status
