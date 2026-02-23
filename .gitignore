@@ -1,3 +1,6 @@
-.gitignore
-etc/
+## dot files
 .sisyphus/
+.gitignore
+
+## file & dirs
+backup/
