@@ -28,12 +28,12 @@ issue-\* コマンドはGitHub Issue管理とGit操作を効率化するワー�
 
 issueコマンドは、以下の4つの責任領域を明確に分離して管理します：
 
-| 領域                           | 責任                               | 視点                       | ファイル                      | 作成タイミング |
-| ------------------------------ | ---------------------------------- | -------------------------- | ----------------------------- | -------------- |
-| **Requirements**               | 「何が必要か」                     | ユーザー・ステークホルダー | specs/requirements.md         | `/issue-req`   |
-| **Specifications (HLD)**       | 「何を作るか」「全体はどうあるか」 | システム・プロダクト       | specs/specifications.md       | `/issue-req`   |
-| **Implementation Guide (LLD)** | 「どう実装するか」                 | コード                     | specs/implementation-guide.md | `/issue-work`  |
-| **ADR**                        | 「なぜその選択か」                 | アーキテクト               | specs/adr/001-xxx.md          | `/issue-req`   |
+| 領域                           | 責任                               | 視点                       | ファイル                     | 作成タイミング |
+| ------------------------------ | ---------------------------------- | -------------------------- | ---------------------------- | -------------- |
+| **Requirements**               | 「何が必要か」                     | ユーザー・ステークホルダー | docs/requirements.md         | `/issue-req`   |
+| **Specifications (HLD)**       | 「何を作るか」「全体はどうあるか」 | システム・プロダクト       | docs/specifications.md       | `/issue-req`   |
+| **Implementation Guide (LLD)** | 「どう実装するか」                 | コード                     | docs/implementation-guide.md | `/issue-work`  |
+| **ADR**                        | 「なぜその選択か」                 | アーキテクト               | docs/adr/001-xxx.md          | `/issue-req`   |
 
 ### HLD vs LLD の概念定義
 
@@ -45,10 +45,10 @@ issueコマンドは、以下の4つの責任領域を明確に分離して管�
 | 読者         | ステークホルダー、アーキテクト                       | 開発者                                   |
 | 粒度         | システム〜モジュール                                 | クラス〜関数                             |
 
-### specs/ディレクトリ構造
+### docs/ディレクトリ構造
 
 ```
-specs/
+docs/
 ├── requirements.md          # プロジェクト全体の要求
 ├── specifications.md        # プロジェクト全体の仕様（HLD）
 ├── implementation-guide.md  # 実装ガイド（LLD）
@@ -101,10 +101,10 @@ specs/
 
 ### パターン一覧
 
-| パターン    | 規模               | specs/更新 | ADR  | 判定方法 |
-| ----------- | ------------------ | ---------- | ---- | -------- |
-| **A（小）** | バグ修正・軽微変更 | なし       | なし | 自動判定 |
-| **B（中）** | 新機能追加         | あり       | 1個  | 自動判定 |
+| パターン    | 規模               | docs/更新 | ADR  | 判定方法 |
+| ----------- | ------------------ | --------- | ---- | -------- |
+| **A（小）** | バグ修正・軽微変更 | なし      | なし | 自動判定 |
+| **B（中）** | 新機能追加         | あり      | 1個  | 自動判定 |
 
 ### 自動判定ロジック
 
@@ -162,7 +162,7 @@ specs/
          │
          ▼
     /issue-close
-         - specs/コミット（コードと同時）
+         - docs/コミット（コードと同時）
          - PRマージ → Issueクローズ
 ```
 
@@ -181,7 +181,7 @@ PR作成後、ユーザーによるレビューが行われます：
       └─ 実装が要件通りでない場合
 ```
 
-### specs/更新タイミング
+### docs/更新タイミング
 
 | フェーズ         | Requirements | Specifications (HLD) | Implementation Guide (LLD) | ADR          | コミット                 |
 | ---------------- | ------------ | -------------------- | -------------------------- | ------------ | ------------------------ |
@@ -192,7 +192,7 @@ PR作成後、ユーザーによるレビューが行われます：
 
 ### 競合対応
 
-specs/の競合は通常のGit競合解決と同じです：
+docs/の競合は通常のGit競合解決と同じです：
 
 ```bash
 # 競合発生時の対応
@@ -202,7 +202,7 @@ git rebase origin/main  # または git merge origin/main
 # 競合解決
 # ... エディタで競合箇所を修正 ...
 
-git add specs/requirements.md
+git add docs/requirements.md
 git rebase --continue  # または git commit
 
 git push --force-with-lease
@@ -341,7 +341,7 @@ git push --force-with-lease
 - Issueクローズ
 - ブランチクリーンアップ
 - 規約チェック（記録なしクローズ防止）
-- **specs/コミット（コードと同時）**
+- **docs/コミット（コードと同時）**
 
 **引数:**
 
@@ -352,7 +352,7 @@ git push --force-with-lease
 1. 記録が未追記のことを確認（規約チェック）
 2. 記録作成（実装記録/対応記録）
 3. Issueへのコメント追記
-4. **specs/コミット（requirements.md、specifications.md、ADR）**
+4. **docs/コミット（requirements.md、specifications.md、ADR）**
 5. PRマージ: `gh pr merge <N> --merge --delete-branch` (Merge Commit + リモートブランチ削除)
 6. Issueクローズ: `gh issue close <N> --reason completed`
 7. Worktree削除: `git worktree remove .worktrees/{N}-feature`
@@ -392,7 +392,7 @@ git push --force-with-lease
 - コミットメッセージにIssue番号を含めない
 - PRなしで `/issue-close` を実行しない
 - squash/rebase マージを使用しない
-- specs/の競合を無視してマージしない
+- docs/の競合を無視してマージしない
 
 ---
 
@@ -437,7 +437,7 @@ git push --force-with-lease
 
 # 4. 完了
 /issue-close 124
-# → specs/コミット → 記録追記 → クローズ
+# → docs/コミット → 記録追記 → クローズ
 ```
 
 ---

@@ -7,7 +7,7 @@ description: PRをマージし、対応記録を追記し、Issueをクローズ
 PRをマージし、GitHub Issueに記録として追記し、クローズ後にworktreeとブランチを削除します。
 複数Issueを並列実行した場合は、各Issueごとに処理します。
 
-**SDD連携**: パターンBの場合、specs/のコミット（コードと同時）を行います。
+**SDD連携**: パターンBの場合、docs/のコミット（コードと同時）を行います。
 
 ## 引数
 
@@ -20,10 +20,10 @@ PRをマージし、GitHub Issueに記録として追記し、クローズ後に
 
 Issueのラベルから規模パターンを判定します：
 
-| ラベル                   | パターン | specs/コミット |
-| ------------------------ | -------- | -------------- |
-| `bug`, `critical`        | A（小）  | なし           |
-| `feature`, `enhancement` | B（中）  | あり           |
+| ラベル                   | パターン | docs/コミット |
+| ------------------------ | -------- | ------------- |
+| `bug`, `critical`        | A（小）  | なし          |
+| `feature`, `enhancement` | B（中）  | あり          |
 
 ---
 
@@ -40,6 +40,7 @@ Issueのラベルから規模パターンを判定します：
    - PRなし → エラー終了。「先に /issue-work を実行してください」
 
 2. **PRの状態確認**
+
    ```bash
    PR_NUMBER=$(gh pr list --head $(git branch --show-current) --json number --jq '.[0].number')
    gh pr view $PR_NUMBER --json state
@@ -49,11 +50,11 @@ Issueのラベルから規模パターンを判定します：
    - CLOSED → エラー終了。「PRは既にクローズされています」
    - MERGED → 「PRは既にマージ済み」としてブランチ削除のみ実行
 
-### 2. specs/コミット（パターンBのみ）
+### 2. docs/コミット（パターンBのみ）
 
 ```bash
-git add specs/requirements.md specs/specifications.md specs/implementation-guide.md specs/adr/
-git commit -m "docs(specs): update specs for #$ISSUE_NUMBER"
+git add docs/requirements.md docs/specifications.md docs/implementation-guide.md docs/adr/
+git commit -m "docs(docs): update docs for #$ISSUE_NUMBER"
 git push origin HEAD
 ```
 
@@ -88,12 +89,12 @@ YYYY-MM-DD
 
 - [実施したテストとその結果]
 
-### 関連Specs
+### 関連docs
 
-- Requirements: `specs/requirements.md#xxx`
-- Specifications: `specs/specifications.md#xxx`
-- Implementation Guide: `specs/implementation-guide.md#xxx`
-- ADR: `specs/adr/NNN-xxx.md`
+- Requirements: `docs/requirements.md#xxx`
+- Specifications: `docs/specifications.md#xxx`
+- Implementation Guide: `docs/implementation-guide.md#xxx`
+- ADR: `docs/adr/NNN-xxx.md`
 ```
 
 **記録テンプレート（バグ修正 / パターンA）**:
@@ -177,14 +178,14 @@ gh issue close $ISSUE_NUMBER --reason completed
 
 ### 7. Planファイルのアーカイブ
 
-本タスクに関連する plan、notepadsを含むファイル一式をアーカイブする
+本タスクに関連する plan、notepadsを含むファイル一式を `.sisyphus/archives` にアーカイブする
 
 ### 8. 完了報告
 
 - マージしたPR番号
 - クローズしたIssue番号
 - 削除したworktree名・ブランチ名
-- specs/コミット内容（パターンBの場合）
+- docs/コミット内容（パターンBの場合）
 - 残課題があれば報告
 
 ---
@@ -220,7 +221,7 @@ git fetch --prune
 - 全PR番号（マージ済み）
 - 全Issue番号（クローズ済み）
 - 削除したブランチ名・worktree名（一覧）
-- specs/コミット内容（パターンBの場合）
+- docs/コミット内容（パターンBの場合）
 
 ---
 
