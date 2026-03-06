@@ -33,8 +33,12 @@ description: 既存Issueの本文更新またはコメント追加を行う
 
 3. **Issue本文の更新**
 
-   ```bash
-   gh issue edit $ISSUE_NUMBER --body "$(cat <<'EOF'
+   ```powershell
+   # temp/ディレクトリの確認・作成
+   if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
+
+   # 更新後の本文を一時ファイルに書き出し
+   @"
    ## 元の内容
    [既存の内容]
 
@@ -47,8 +51,10 @@ description: 既存Issueの本文更新またはコメント追加を行う
 
    ### 理由
    - レビュー時に要件の不足が判明
-   EOF
-   )"
+   "@ | Out-File -FilePath "temp/issue-body.md" -Encoding utf8
+
+   # Issue本文を更新
+   gh issue edit $ISSUE_NUMBER --body-file "temp/issue-body.md"
    ```
 
 4. **更新結果の確認**: `gh issue view $ISSUE_NUMBER` で更新結果を確認
@@ -69,8 +75,12 @@ description: 既存Issueの本文更新またはコメント追加を行う
 
 3. **コメントの追加**
 
-   ```bash
-   gh issue comment $ISSUE_NUMBER --body "$(cat <<'EOF'
+   ```powershell
+   # temp/ディレクトリの確認・作成
+   if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
+
+   # コメント本文を一時ファイルに書き出し
+   @"
    ## 修正指示（YYYY-MM-DD）
 
    ### 問題点
@@ -81,8 +91,10 @@ description: 既存Issueの本文更新またはコメント追加を行う
 
    ### 修正方針
    - [修正の方向性]
-   EOF
-   )"
+   "@ | Out-File -FilePath "temp/comment-body.md" -Encoding utf8
+
+   # コメントを追加
+   gh issue comment $ISSUE_NUMBER --body-file "temp/comment-body.md"
    ```
 
 4. **コメント結果の確認**: `gh issue view $ISSUE_NUMBER --comments` でコメント結果を確認

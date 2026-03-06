@@ -116,7 +116,40 @@ YYYY-MM-DD
 - [残っている課題があれば記載。なければ「なし」]
 ```
 
-**Issueへ追記**: `gh issue comment $ISSUE_NUMBER --body "<記録>"`
+**Issueへ追記**:
+
+```powershell
+# temp/ディレクトリの確認・作成
+if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
+
+# 記録を一時ファイルに書き出し
+@"
+## 対応記録
+
+### 対応日時
+
+YYYY-MM-DD
+
+### 対応内容
+
+- [変更したファイルと変更内容の概要]
+
+### コミット
+
+- <コミットハッシュ>: <コミットメッセージ>
+
+### テスト結果
+
+- [実施したテストとその結果]
+
+### 残課題
+
+- [残っている課題があれば記載。なければ「なし」]
+"@ | Out-File -FilePath "temp/comment-body.md" -Encoding utf8
+
+# コメント追加
+gh issue comment $ISSUE_NUMBER --body-file "temp/comment-body.md"
+```
 
 ### 5. Issueクローズ
 
