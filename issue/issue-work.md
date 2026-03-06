@@ -163,7 +163,32 @@ Issueのラベルから規模パターンを判定します：
 11. **PR作成**
     - `gh pr list --head $(git branch --show-current) --state open` で既存のPRを確認
     - PRが存在する場合: `gh pr edit` で更新
-    - PRが存在しない場合: `gh pr create --base main --title "feat/fix: {要約} (#$ISSUE_NUMBER)" --body "Issueの要約 + 実装内容の概要 + テスト結果"` で作成
+    - PRが存在しない場合: 以下のコマンドで作成
+
+    ```powershell
+    # temp/ディレクトリの確認・作成
+    if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
+
+    # PR本文を一時ファイルに書き出し
+    @"
+    ## 概要
+
+    [Issueの要約]
+
+    ## 実装内容
+
+    [実装内容の概要]
+
+    ## テスト結果
+
+    [テスト結果の概要]
+
+    Closes #$ISSUE_NUMBER
+    "@ | Out-File -FilePath "temp/pr-body.md" -Encoding utf8
+
+    # PR作成
+    gh pr create --base main --title "feat/fix: {要約} (#$ISSUE_NUMBER)" --body-file "temp/pr-body.md"
+    ```
 
 12. **レビュー依頼**
     - ユーザーにレビューを促す:
@@ -215,9 +240,27 @@ Issueのラベルから規模パターンを判定します：
 6. **各PR作成**
    - 各worktreeでPRを作成:
 
-   ```bash
+   ```powershell
    cd .worktrees/101-feature-name
-   gh pr create --base main --title "feat: ... (#101)" --body "..."
+
+   # temp/ディレクトリの確認・作成
+   if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
+
+   # PR本文を一時ファイルに書き出し
+   @"
+   ## 概要
+
+   [Issueの要約]
+
+   ## 実装内容
+
+   [実装内容の概要]
+
+   Closes #101
+   "@ | Out-File -FilePath "temp/pr-body.md" -Encoding utf8
+
+   # PR作成
+   gh pr create --base main --title "feat: ... (#101)" --body-file "temp/pr-body.md"
    ```
 
 7. **レビュー依頼**
