@@ -31,12 +31,7 @@ Issueのラベルから規模パターンを判定します：
 
 ### 1. 前提確認
 
-1. **PRの存在確認**
-
-   ```bash
-   gh pr list --head $(git branch --show-current) --state open
-   ```
-
+1. **PRの存在確認**: `gh pr list --head $(git branch --show-current) --state open`
    - PRなし → エラー終了。「先に /issue-work を実行してください」
 
 2. **PRの状態確認**
@@ -60,9 +55,7 @@ git push origin HEAD
 
 ### 3. PRマージ
 
-```bash
-gh pr merge $PR_NUMBER --merge --delete-branch
-```
+`gh pr merge $PR_NUMBER --merge --delete-branch` でマージする。
 
 - **コンフリクト時**: エラー終了。「手動でコンフリクト解決が必要です」
 
@@ -123,58 +116,29 @@ YYYY-MM-DD
 - [残っている課題があれば記載。なければ「なし」]
 ```
 
-**Issueへ追記**:
-
-```bash
-gh issue comment $ISSUE_NUMBER --body "<記録>"
-```
+**Issueへ追記**: `gh issue comment $ISSUE_NUMBER --body "<記録>"`
 
 ### 5. Issueクローズ
 
-```bash
-gh issue close $ISSUE_NUMBER --reason completed
-```
+`gh issue close $ISSUE_NUMBER --reason completed` でクローズする。
 
 ### 6. クリーンアップ
 
-1. **Devサーバー停止**（起動している場合）
-   - `Ctrl+C` または `pkill -f "npm run dev"`
+1. **Devサーバー停止**（起動している場合）: `Ctrl+C` または `pkill -f "npm run dev"`
 
-2. **メインディレクトリに戻る**
+2. **メインディレクトリに戻る**: `cd <project_root>`
 
-   ```bash
-   cd <project_root>
-   ```
+3. **mainブランチを最新化**: `git checkout main` して `git pull`
 
-3. **mainブランチを最新化**
+4. **worktree削除**:
+   - 機能追加: `git worktree remove .worktrees/$ISSUE_NUMBER-feature`
+   - バグ修正: `git worktree remove .worktrees/$ISSUE_NUMBER-fix`
 
-   ```bash
-   git checkout main
-   git pull
-   ```
+5. **作業ブランチ削除**:
+   - 機能追加: `git branch -d feature/issue-$ISSUE_NUMBER`
+   - バグ修正: `git branch -d fix/issue-$ISSUE_NUMBER`
 
-4. **worktree削除**
-
-   ```bash
-   # 機能追加
-   git worktree remove .worktrees/$ISSUE_NUMBER-feature
-   # バグ修正
-   git worktree remove .worktrees/$ISSUE_NUMBER-fix
-   ```
-
-5. **作業ブランチ削除**
-
-   ```bash
-   # 機能追加
-   git branch -d feature/issue-$ISSUE_NUMBER
-   # バグ修正
-   git branch -d fix/issue-$ISSUE_NUMBER
-   ```
-
-6. **リモート追跡ブランチ削除**
-   ```bash
-   git fetch --prune
-   ```
+6. **リモート追跡ブランチ削除**: `git fetch --prune`
 
 ### 7. Planファイルのアーカイブ
 

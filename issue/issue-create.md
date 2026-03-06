@@ -49,15 +49,9 @@ description: /issue-req の結果をもとにGitHub Issueを作成する
    [推奨される修正アプローチ]
    ```
 
-2. **ラベルの選定**
-   - `bug`, `critical` など
-   - 既存のラベル一覧は `gh label list` で確認する
+2. **ラベルの選定**: `bug`, `critical` など（既存のラベル一覧は `gh label list` で確認）
 
-3. **Issueの作成**
-
-   ```bash
-   gh issue create --title "<タイトル>" --body "<本文>" --label "<ラベル>"
-   ```
+3. **Issueの作成**: `gh issue create --title "<タイトル>" --body "<本文>" --label "<ラベル>"`
 
 4. **完了報告**
 
@@ -95,18 +89,11 @@ description: /issue-req の結果をもとにGitHub Issueを作成する
    - ADR: `docs/adr/NNN-xxx.md`
    ```
 
-2. **ラベルの選定**
-   - `enhancement`, `feature` など
-   - 既存のラベル一覧は `gh label list` で確認する
+2. **ラベルの選定**: `enhancement`, `feature` など（既存のラベル一覧は `gh label list` で確認）
 
-3. **Issueの作成**
+3. **Issueの作成**: `gh issue create --title "<タイトル>" --body "<本文>" --label "<ラベル>"`
 
-   ```bash
-   gh issue create --title "<タイトル>" --body "<本文>" --label "<ラベル>"
-   ```
-
-4. **docs/へのIssue番号紐付け**
-   - Draftで作成した `docs/requirements.md` と `docs/adr/NNN-xxx.md` にIssue番号を追記
+4. **docs/へのIssue番号紐付け**: Draftで作成した `docs/requirements.md` と `docs/adr/NNN-xxx.md` にIssue番号を追記
 
 5. **完了報告**
 
