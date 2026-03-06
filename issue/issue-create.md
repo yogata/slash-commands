@@ -11,93 +11,93 @@ description: /issue-req の結果をもとにGitHub Issueを作成する
 
 /issue-req で判定されたパターンに従って処理します：
 
-| パターン    | 処理                    | ラベル                   |
-| ----------- | ----------------------- | ------------------------ |
-| **A（小）** | Issue本文のみ作成       | `bug` 等                 |
-| **B（中）** | Issue作成 + docs/紐付け | `feature`, `enhancement` |
+| パターン    | 処理                                | ラベル                   |
+| ----------- | ----------------------------------- | ------------------------ |
+| **A（小）** | Issue本文 + コメント（分析結果）    | `bug` 等                 |
+| **B（中）** | Issue本文 + コメント + docs/紐付け  | `feature`, `enhancement` |
+
+## テンプレート
+
+Issue本文は `.github/ISSUE_TEMPLATE/` のテンプレートを使用します。
+GitHub公式パターンに準拠し、Issue本文は「事実/要望のみ」とし、分析結果はコメントとして追加します。
+
+| パターン    | テンプレートファイル          | CLIコマンド                                      |
+| ----------- | ----------------------------- | ------------------------------------------------ |
+| **A（小）** | `.github/ISSUE_TEMPLATE/bug_report.md` | `gh issue create --template "Bug Report"` |
+| **B（中）** | `.github/ISSUE_TEMPLATE/feature_request.md` | `gh issue create --template "Feature Request"` |
+
+---
 
 ## 手順
 
 ### パターンA（小規模・バグ修正）
 
-1. **Issue本文の作成**
+1. **Issue本文の作成** — テンプレートを使用
 
-   ```markdown
-   ## 事象
-
-   [何が起きているかの説明]
-
-   ## 根本原因
-
-   [原因の分析結果]
-
-   ## 影響範囲
-
-   [影響を受けるコンポーネント・機能]
-
-   ## 再現手順
-
-   1. [手順1]
-   2. [手順2]
-
-   ## 期待される動作
-
-   [本来どう動くべきか]
-
-   ## 対応方針
-
-   [推奨される修正アプローチ]
+   ```bash
+   gh issue create --template "Bug Report" --title "<タイトル>" --label "bug"
    ```
 
-2. **ラベルの選定**: `bug`, `critical` など（既存のラベル一覧は `gh label list` で確認）
+   テンプレート項目（`.github/ISSUE_TEMPLATE/bug_report.md` 参照）:
+   - Description（バグの説明）— 必須
+   - Steps to Reproduce（再現手順）— 必須
+   - Expected Behavior（期待動作）— 必須
+   - Actual Behavior（実際の動作）— オプション
+   - Screenshots/Videos — オプション
+   - Additional Context — オプション
 
-3. **Issueの作成**: `gh issue create --title "<タイトル>" --body "<本文>" --label "<ラベル>"`
+2. **Issueコメント追加** — 分析結果
 
-4. **完了報告**
+   ```bash
+   gh issue comment {N} --body "<分析結果>"
+   ```
+
+   コメント内容:
+   - 根本原因（なぜ起きているか）
+   - 影響範囲（どこに影響するか）
+   - 対応方針（どう対処すべきか）
+
+3. **完了報告**
 
    > ✅ Issue #{N} を作成しました（パターンA）。
+   > Issue本文 + コメント（分析結果）を追加しました。
    > 次のステップ: `/issue-work {N}` を使用して実装を開始しますか？
 
 ---
 
 ### パターンB（中規模・新機能追加）
 
-1. **Issue本文の作成**
+1. **Issue本文の作成** — テンプレートを使用
 
-   ```markdown
-   ## 概要
-
-   [機能の概要と目的]
-
-   ## 要件
-
-   - [要件1]
-   - [要件2]
-
-   ## スコープ
-
-   - 対象: [実装範囲]
-   - 対象外: [今回の実装対象外]
-
-   ## 技術的なメモ
-
-   [想定される技術的アプローチや制約などがあれば記載]
-
-   ## 関連docs
-
-   - Requirements: `docs/requirements.md#xxx`
-   - ADR: `docs/adr/NNN-xxx.md`
+   ```bash
+   gh issue create --template "Feature Request" --title "<タイトル>" --label "enhancement"
    ```
 
-2. **ラベルの選定**: `enhancement`, `feature` など（既存のラベル一覧は `gh label list` で確認）
+   テンプレート項目（`.github/ISSUE_TEMPLATE/feature_request.md` 参照）:
+   - Proposal Summary（機能の概要）— 必須
+   - Problem Statement（解決する課題）— 必須
+   - Proposed Solution（提案する解決策）— 必須
+   - Use Cases（使用例）— オプション
+   - Alternatives（代替案）— オプション
+   - Additional Context — オプション
 
-3. **Issueの作成**: `gh issue create --title "<タイトル>" --body "<本文>" --label "<ラベル>"`
+2. **Issueコメント追加** — 技術検討
 
-4. **docs/へのIssue番号紐付け**: Draftで作成した `docs/requirements.md` と `docs/adr/NNN-xxx.md` にIssue番号を追記
+   ```bash
+   gh issue comment {N} --body "<技術検討>"
+   ```
 
-5. **完了報告**
+   コメント内容:
+   - 技術的なアプローチ
+   - アーキテクチャ決定
+   - 実装のスコープ
+
+3. **docs/へのIssue番号紐付け**: Draftで作成した `docs/requirements.md` と `docs/adr/NNN-xxx.md` にIssue番号を追記
+
+4. **完了報告**
 
    > ✅ Issue #{N} を作成しました（パターンB）。
+   > Issue本文 + コメント（技術検討）を追加しました。
    > Draftの docs/requirements.md、docs/adr/NNN-xxx.md にIssue番号を紐付けました。
    > 次のステップ: `/issue-work {N}` を使用して実装を開始しますか？
 
@@ -125,6 +125,7 @@ description: /issue-req の結果をもとにGitHub Issueを作成する
 
 /issue-create
 # → Issue #123 作成（パターンA）
+# → Issue本文 + コメント（分析結果）
 ```
 
 ### パターンB
@@ -137,5 +138,6 @@ description: /issue-req の結果をもとにGitHub Issueを作成する
 
 /issue-create
 # → Issue #124 作成（パターンB）
+# → Issue本文 + コメント（技術検討）
 # → docs/にIssue番号紐付け
 ```
