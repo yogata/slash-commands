@@ -235,11 +235,7 @@ git push --force-with-lease
 - バグ修正: 事象分析（概要・根本原因・影響範囲・対応方針）
 - **パターンB: 要件の提案と仕様書・ADR更新の確認 → 承認後にDraft更新（requirements.md、ADR）**
 
-**次のステップ:**
-
-```
-/issue-create
-```
+**次のステップ:** `/issue-create`
 
 ---
 
@@ -267,11 +263,7 @@ git push --force-with-lease
 - 機能追加: `enhancement`, `feature`
 - バグ修正: `bug`, `critical`
 
-**次のステップ:**
-
-```
-/issue-work <Issue番号>
-```
+**次のステップ:** `/issue-work <Issue番号>`
 
 ---
 
@@ -322,11 +314,7 @@ git push --force-with-lease
 - テスト結果
 - コミットハッシュ
 
-**次のステップ:**
-
-```
-/issue-close <Issue番号>
-```
+**次のステップ:** `/issue-close <Issue番号>`
 
 ---
 

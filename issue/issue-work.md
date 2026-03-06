@@ -55,31 +55,17 @@ Issueのラベルから規模パターンを判定します：
 ### A. 単一Issueの場合
 
 1. **Issueと文脈の確認**
-   - 対象のIssueを確認する:
-
-   ```bash
-   gh issue view $ISSUE_NUMBER
-   ```
-
+   - `gh issue view $ISSUE_NUMBER` で対象のIssueを確認
    - ラベルから文脈（機能追加 or バグ修正）と規模（パターンA/B）を判定する:
      - `enhancement`, `feature` → 機能追加（パターンB）
      - `bug`, `critical` → バグ修正（パターンA）
 
 2. **Worktree作成**
-   - worktree用ディレクトリを作成:
-
-   ```bash
-   mkdir -p .worktrees
-   ```
-
+   - `mkdir -p .worktrees` でworktree用ディレクトリを作成
    - 文脈に応じて、以下の命名規則でworktreeを作成する:
      - **機能追加**: `git worktree add .worktrees/$ISSUE_NUMBER-feature -b feature/issue-$ISSUE_NUMBER`
      - **バグ修正**: `git worktree add .worktrees/$ISSUE_NUMBER-fix -b fix/issue-$ISSUE_NUMBER`
-   - 作成したworktreeに移動する:
-
-   ```bash
-   cd .worktrees/$ISSUE_NUMBER-<type>
-   ```
+   - `cd .worktrees/$ISSUE_NUMBER-<type>` で作成したworktreeに移動
 
 3. **@planによる計画立案**
    - 実装計画は `docs/` とは分離し、 Plan agent の既定場所に保存する
@@ -94,12 +80,12 @@ Issueのラベルから規模パターンを判定します：
      - **バグ修正**: 修正対象、変更内容、テスト方針、リスク、見積もり
 
 4. **/start-workによる実装**
-   - 立案した計画に基づいて実装を開始する:
 
    ```
    /start-work
    ```
 
+   - 立案した計画に基づいて実装を開始する
    - 計画に従い、コード作成・修正およびテストを実施する
 
 5. **specifications.md（HLD）更新（パターンBのみ）**
@@ -166,42 +152,18 @@ Issueのラベルから規模パターンを判定します：
    ```
 
 9. **コミット**
-   - 変更内容をステージングする:
-
-   ```bash
-   git add -A
-   ```
-
+   - `git add -A` で変更内容をステージング
    - 文脈に応じたコミットメッセージでコミットする:
      - **機能追加**: `git commit -m "feat: <実装内容の要約> (#$ISSUE_NUMBER)"`
      - **バグ修正**: `git commit -m "fix: <修正内容の要約> (#$ISSUE_NUMBER)"`
    - **注意**: docs/のコミットは `/issue-close` で行う（コードと同時）
 
-10. **プッシュ**
-    - ブランチをリモートリポジトリにプッシュする:
-
-    ```bash
-    git push origin HEAD
-    ```
+10. **プッシュ**: `git push origin HEAD` でブランチをリモートリポジトリにプッシュ
 
 11. **PR作成**
-    - 既存のPRを確認する:
-
-    ```bash
-    gh pr list --head $(git branch --show-current) --state open
-    ```
-
-    - PRが存在する場合は更新する:
-
-    ```bash
-    gh pr edit
-    ```
-
-    - PRが存在しない場合は作成する:
-
-    ```bash
-    gh pr create --base main --title "feat/fix: {要約} (#$ISSUE_NUMBER)" --body "Issueの要約 + 実装内容の概要 + テスト結果"
-    ```
+    - `gh pr list --head $(git branch --show-current) --state open` で既存のPRを確認
+    - PRが存在する場合: `gh pr edit` で更新
+    - PRが存在しない場合: `gh pr create --base main --title "feat/fix: {要約} (#$ISSUE_NUMBER)" --body "Issueの要約 + 実装内容の概要 + テスト結果"` で作成
 
 12. **レビュー依頼**
     - ユーザーにレビューを促す:
@@ -214,29 +176,13 @@ Issueのラベルから規模パターンを判定します：
 
 13. **Worktreeの状態確認**
     - レビュー待ちの間、worktreeは保持される
-    - メインディレクトリに戻る場合:
-
-    ```bash
-    cd ../..
-    ```
-
-    - 再度worktreeで作業する場合:
-
-    ```bash
-    cd .worktrees/$ISSUE_NUMBER-<type>
-    ```
+    - メインディレクトリに戻る場合: `cd ../..`
+    - 再度worktreeで作業する場合: `cd .worktrees/$ISSUE_NUMBER-<type>`
 
 ### B. 複数Issueの場合
 
 1. **各Issueの確認**
-   - 指定されたIssueをすべて確認する:
-
-   ```bash
-   gh issue view 101
-   gh issue view 102
-   gh issue view 103
-   ```
-
+   - `gh issue view 101`, `gh issue view 102`, `gh issue view 103` で指定されたIssueをすべて確認
    - 各Issueの文脈（機能追加/バグ修正）を判定する
 
 2. **競合検出**
@@ -249,18 +195,10 @@ Issueのラベルから規模パターンを判定します：
      - **競合ありグループ**: 依存順序で直列実行
 
 3. **Worktree作成**
-   - worktree用ディレクトリを作成:
-
-   ```bash
-   mkdir -p .worktrees
-   ```
-
+   - `mkdir -p .worktrees` でworktree用ディレクトリを作成
    - 各Issue用のworktreeを作成:
-
-   ```bash
-   git worktree add .worktrees/101-feature-name -b feature/issue-101
-   git worktree add .worktrees/102-bugfix-name -b fix/issue-102
-   ```
+     - `git worktree add .worktrees/101-feature-name -b feature/issue-101`
+     - `git worktree add .worktrees/102-bugfix-name -b fix/issue-102`
 
 4. **並列実行**
    - **競合なしグループ**: `run_in_background=true` で同時実行
