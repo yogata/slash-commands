@@ -33,7 +33,6 @@ Issueのラベルから規模パターンを判定します：
 
 1. **PRの存在確認**: `gh pr list --head $(git branch --show-current) --state open`
    - PRなし → エラー終了。「先に /issue-work を実行してください」
-
 2. **PRの状態確認**
 
    ```bash
@@ -55,13 +54,12 @@ git push origin HEAD
 
 ### 3. PRマージ
 
-`gh pr merge $PR_NUMBER --merge --delete-branch` でマージする。
-
+- `gh pr merge $PR_NUMBER --squash --delete-branch`
 - **コンフリクト時**: エラー終了。「手動でコンフリクト解決が必要です」
 
 ### 4. 記録の作成・追記
 
-**記録テンプレート（機能追加 / パターンB）**:
+**記録テンプレート（機能追加 / パターンB）**: @.opencode/commands/issue/templates/comment_implementation.md
 
 ```markdown
 ## 実装記録
@@ -90,7 +88,7 @@ YYYY-MM-DD
 - ADR: `docs/adr/NNN-xxx.md`
 ```
 
-**記録テンプレート（バグ修正 / パターンA）**:
+**記録テンプレート（バグ修正 / パターンA）**: @.opencode/commands/issue/templates/comment_record.md
 
 ```markdown
 ## 対応記録
@@ -158,19 +156,14 @@ gh issue comment $ISSUE_NUMBER --body-file "temp/comment-body.md"
 ### 6. クリーンアップ
 
 1. **Devサーバー停止**（起動している場合）: `Ctrl+C` または `pkill -f "npm run dev"`
-
 2. **メインディレクトリに戻る**: `cd <project_root>`
-
 3. **mainブランチを最新化**: `git checkout main` して `git pull`
-
 4. **worktree削除**:
    - 機能追加: `git worktree remove .worktrees/$ISSUE_NUMBER-feature`
    - バグ修正: `git worktree remove .worktrees/$ISSUE_NUMBER-fix`
-
 5. **作業ブランチ削除**:
    - 機能追加: `git branch -d feature/issue-$ISSUE_NUMBER`
    - バグ修正: `git branch -d fix/issue-$ISSUE_NUMBER`
-
 6. **リモート追跡ブランチ削除**: `git fetch --prune`
 
 ### 7. Planファイルのアーカイブ

@@ -160,12 +160,14 @@ Issueのラベルから規模パターンを判定します：
 
 10. **プッシュ**: `git push origin HEAD` でブランチをリモートリポジトリにプッシュ
 
-11. **PR作成**
-    - `gh pr list --head $(git branch --show-current) --state open` で既存のPRを確認
-    - PRが存在する場合: `gh pr edit` で更新
-    - PRが存在しない場合: 以下のコマンドで作成
+ 11. **PR作成**
+     - `gh pr list --head $(git branch --show-current) --state open` で既存のPRを確認
+     - PRが存在する場合: `gh pr edit` で更新
+     - PRが存在しない場合: 以下のコマンドで作成
 
-    ```powershell
+     **PRテンプレート**: @.opencode/commands/issue/templates/pr_body.md
+
+     ```powershell
     # temp/ディレクトリの確認・作成
     if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
 
