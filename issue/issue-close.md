@@ -35,8 +35,9 @@ Issueのラベルから規模パターンを判定します：
    - PRなし → エラー終了。「先に /issue-work を実行してください」
 2. **PRの状態確認**
 
-   ```bash
-   PR_NUMBER=$(gh pr list --head $(git branch --show-current) --json number --jq '.[0].number')
+   ```powershell
+   $branch = git branch --show-current
+   $PR_NUMBER = (gh pr list --head $branch --json number | ConvertFrom-Json)[0].number
    gh pr view $PR_NUMBER --json state
    ```
 
