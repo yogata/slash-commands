@@ -236,21 +236,13 @@ Issueのラベルから規模パターンを判定します：
    # temp/ディレクトリの確認・作成
    if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
 
-   # PR本文を一時ファイルに書き出し
-   @"
-   ## 概要
+    # PR本文を一時ファイルに書き出し（テンプレート参照）
+    # テンプレート: @.opencode/commands/issue/templates/pr_body.md
+    $templateContent = Get-Content -Path ".opencode/commands/issue/templates/pr_body.md" -Raw
+    $templateContent -replace "#\{ISSUE_NUMBER\}", $issue | Out-File -FilePath "temp/pr-body.md" -Encoding utf8
 
-   [Issueの要約]
-
-   ## 実装内容
-
-   [実装内容の概要]
-
-   Closes #101
-   "@ | Out-File -FilePath "temp/pr-body.md" -Encoding utf8
-
-   # PR作成
-   gh pr create --base main --title "feat: ... (#101)" --body-file "temp/pr-body.md"
+    # PR作成
+    gh pr create --base main --title "feat/fix: {要約} (#$issue)" --body-file "temp/pr-body.md"
    ```
 
 7. **レビュー依頼**
