@@ -62,58 +62,7 @@ git push origin HEAD
 
 **記録テンプレート（機能追加 / パターンB）**: @.opencode/commands/issue/templates/comment_implementation.md
 
-```markdown
-## 実装記録
-
-### 実装日時
-
-YYYY-MM-DD
-
-### 実装概要
-
-- [実装した機能の概要]
-
-### コミット
-
-- <コミットハッシュ>: <コミットメッセージ>
-
-### テスト結果
-
-- [実施したテストとその結果]
-
-### 関連docs
-
-- Requirements: `docs/requirements.md#xxx`
-- Specifications: `docs/specifications.md#xxx`
-- Implementation Guide: `docs/implementation-guide.md#xxx`
-- ADR: `docs/adr/NNN-xxx.md`
-```
-
 **記録テンプレート（バグ修正 / パターンA）**: @.opencode/commands/issue/templates/comment_record.md
-
-```markdown
-## 対応記録
-
-### 対応日時
-
-YYYY-MM-DD
-
-### 対応内容
-
-- [変更したファイルと変更内容の概要]
-
-### コミット
-
-- <コミットハッシュ>: <コミットメッセージ>
-
-### テスト結果
-
-- [実施したテストとその結果]
-
-### 残課題
-
-- [残っている課題があれば記載。なければ「なし」]
-```
 
 **Issueへ追記**:
 
@@ -156,7 +105,7 @@ gh issue comment $ISSUE_NUMBER --body-file "temp/comment-body.md"
 
 ### 6. クリーンアップ
 
-1. **Devサーバー停止**（起動している場合）: `Ctrl+C` または `pkill -f "npm run dev"`
+1. **Devサーバー停止**（起動している場合）: `Ctrl+C` または `Stop-Process -Name "npm" -Force`
 2. **メインディレクトリに戻る**: `cd <project_root>`
 3. **mainブランチを最新化**: `git checkout main` して `git pull`
 4. **worktree削除**:
