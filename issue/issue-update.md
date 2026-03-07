@@ -79,22 +79,25 @@ description: 既存Issueの本文更新またはコメント追加を行う
    # temp/ディレクトリの確認・作成
    if (-not (Test-Path "temp")) { New-Item -ItemType Directory -Path "temp" -Force }
 
-   # コメント本文を一時ファイルに書き出し
-   @"
-   ## 修正指示（YYYY-MM-DD）
+    # コメント本文を一時ファイルに書き出し
+    @"
+    ## 修正指示（YYYY-MM-DD）
 
-   ### 問題点
-   - [実装が要件通りでない箇所]
+    ### 問題点
+    - [実装が要件通りでない箇所]
 
-   ### 期待される動作
-   - [本来あるべき動作]
+    ### 期待される動作
+    - [本来あるべき動作]
 
-   ### 修正方針
-   - [修正の方向性]
-   "@ | Out-File -FilePath "temp/comment-body.md" -Encoding utf8
+    ### 修正方針
+    - [修正の方向性]
+    "@ | Out-File -FilePath "temp/comment-body.md" -Encoding utf8
 
-   # コメントを追加
-   gh issue comment $ISSUE_NUMBER --body-file "temp/comment-body.md"
+    # コメントを追加
+    gh issue comment $ISSUE_NUMBER --body-file "temp/comment-body.md"
+    ```
+
+    **コメントテンプレート**: @.opencode/commands/issue/templates/comment_fix.md
    ```
 
 4. **コメント結果の確認**: `gh issue view $ISSUE_NUMBER --comments` でコメント結果を確認
