@@ -47,7 +47,7 @@ Issueのラベルから規模パターンを判定します：
 
 ### 2. docs/コミット（パターンBのみ）
 
-```bash
+```powershell
 git add docs/requirements.md docs/specifications.md docs/implementation-guide.md docs/adr/
 git commit -m "docs(docs): update docs for #$ISSUE_NUMBER"
 git push origin HEAD
