@@ -110,18 +110,18 @@ description: 既存Issueの本文更新またはコメント追加を行う
 
 複数Issueを指定した場合は、順次処理します：
 
-```bash
+```powershell
 # 各Issueに対して本文更新またはコメント追加
-for issue in 101 102 103; do
-  gh issue edit $issue --body "..."
-done
+foreach ($issue in 101,102,103) {
+    gh issue edit $issue --body "..."
+}
 ```
 
 ## 使用例
 
 ### 仕様バグ対応（本文更新）
 
-```bash
+```powershell
 # レビューで「要件が不足している」と判明
 /issue-update 101
 # → 要件を追加・修正
@@ -130,7 +130,7 @@ done
 
 ### 実装バグ対応（コメント追加）
 
-```bash
+```powershell
 # レビューで「実装が要件通りでない」と判明
 /issue-update 101 --comment
 # → 修正指示をコメント
